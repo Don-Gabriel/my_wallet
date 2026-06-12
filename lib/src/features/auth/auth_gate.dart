@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/wallet_repository.dart';
 import '../../models/wallet_user.dart';
-import '../../shared/common_widgets.dart';
+import '../../shared/app_splash_screen.dart';
 import '../shell/app_shell.dart';
 import 'sign_in_screen.dart';
 
@@ -24,9 +24,7 @@ class AuthGate extends StatelessWidget {
       stream: repository.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
+          return const AppSplashScreen(status: 'Opening your wallet');
         }
 
         final user = snapshot.data;
@@ -50,17 +48,6 @@ class LoadingAppScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            WalletMark(),
-            SizedBox(height: 24),
-            CircularProgressIndicator(),
-          ],
-        ),
-      ),
-    );
+    return const AppSplashScreen(status: 'Preparing privacy controls');
   }
 }

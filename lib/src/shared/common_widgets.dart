@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'branding.dart';
+
 class WalletMark extends StatelessWidget {
   const WalletMark({super.key, this.size = 40});
 
@@ -7,18 +9,41 @@ class WalletMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dimension = size + 36;
     return Center(
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.14),
+              blurRadius: 18,
+              offset: const Offset(0, 10),
+            ),
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Icon(
-            Icons.account_balance_wallet,
-            size: size,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Image.asset(
+            walletLogoAsset,
+            width: dimension,
+            height: dimension,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: dimension,
+                height: dimension,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  Icons.account_balance_wallet,
+                  size: size,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+              );
+            },
           ),
         ),
       ),

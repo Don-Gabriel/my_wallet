@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../../firebase_options.dart';
 import '../data/firebase_wallet_repository.dart';
 import '../data/wallet_repository.dart';
-import '../shared/common_widgets.dart';
+import '../shared/app_splash_screen.dart';
 import 'my_wallet_app.dart';
 
 class MyWalletBootstrap extends StatefulWidget {
@@ -18,7 +18,17 @@ class MyWalletBootstrap extends StatefulWidget {
 }
 
 class _MyWalletBootstrapState extends State<MyWalletBootstrap> {
-  late final Future<WalletRepository> _repositoryFuture = _initialize();
+  late final Future<WalletRepository> _repositoryFuture =
+      _initializeWithSplash();
+
+  Future<WalletRepository> _initializeWithSplash() async {
+    final repositoryFuture = _initialize();
+    await Future.wait<void>([
+      repositoryFuture.then((_) {}),
+      Future<void>.delayed(const Duration(milliseconds: 2200)),
+    ]);
+    return repositoryFuture;
+  }
 
   Future<WalletRepository> _initialize() async {
     await Firebase.initializeApp(
@@ -41,32 +51,9 @@ class _MyWalletBootstrapState extends State<MyWalletBootstrap> {
         return MaterialApp(
           title: 'MyWallet',
           debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            body: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const WalletMark(),
-                    const SizedBox(height: 24),
-                    Text(
-                      'MyWallet',
-                      style: Theme.of(context).textTheme.headlineMedium
-                          ?.copyWith(fontWeight: FontWeight.w800),
-                    ),
-                    const SizedBox(height: 16),
-                    if (snapshot.hasError)
-                      Text(
-                        'Firebase setup needs attention: ${snapshot.error}',
-                        textAlign: TextAlign.center,
-                      )
-                    else
-                      const CircularProgressIndicator(),
-                  ],
-                ),
-              ),
-            ),
+          home: AppSplashScreen(
+            status: 'Syncing your private wallet',
+            error: snapshot.error,
           ),
         );
       },

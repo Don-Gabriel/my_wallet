@@ -1,0 +1,1 @@
+const walletLogoAsset = 'logo.png';
